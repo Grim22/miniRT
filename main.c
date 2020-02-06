@@ -34,14 +34,15 @@ void get_pix_vect(t_cord *vect, int i, int j, t_cam cam, t_reso res)
 
     angle = (float)cam.FOV * M_PI / 180;
     size = 2 * tan(angle / 2);
-    screen_ratio = res.x / res.y;
+    screen_ratio = (float)res.x / (float)res.y;
     vect->x = (0.5 + i) * size / (float)res.x - size / 2;
     vect->x = vect->x * screen_ratio;
-    vect->y = (0.5 + j) * size / (float)res.y - size / 2;
+    vect->y = -(0.5 + j) * size / (float)res.y + size / 2;
+    //vect->y = vect->y / screen_ratio;
     vect->z = -1;
     *vect = vect_normalize(*vect);
 }
-
+/*
 void get_light_angle(t_cam cam, t_cord dir, t_sphere sp, float d, t_cord *inter, t_cord *N)
 {
     *inter = cam.pos + vect_scalar_prod(dir, d);
@@ -51,8 +52,8 @@ void get_light_angle(t_cam cam, t_cord dir, t_sphere sp, float d, t_cord *inter,
     *N = vect_normalize(*N);
     angle = vect_prod(*N, *inter);
 }
-
-void fill_if_sphere(t_data *img, t_reso res, t_cam cam, t_sphere sp)
+*/
+void draw_sphere(t_data *img, t_reso res, t_cam cam, t_sphere sp)
 {
 int i;
 int j;
@@ -71,11 +72,11 @@ while(i < res.x)
         get_pix_vect(&dir, i, j, cam, res);
         if (intersect_sphere(cam, dir, sp, &d))
         {
-            angle = get_light_angle(cam, dir, sp, d, &inter, &N);
-            my_mlx_pixel_put(img, i, j, 0xFFFF00);
+            //angle = get_light_angle(cam, dir, sp, d, &inter, &N);
+            my_mlx_pixel_put(img, i, j, sp.col);
         }
-        else
-            my_mlx_pixel_put(img, i, j, 0xFFFFFF);
+        //else // background color
+            //my_mlx_pixel_put(img, i, j, 0xFFFFFF);
         j++;
     }
     i++;
@@ -94,9 +95,10 @@ t_cam cam;
 
 ft_init_parse(&reso, &amb, &light, &sp, &cam);
 init_mlx(&img, reso.x, reso.y);
-fill_if_sphere(&img, reso, cam, sp);
+fill_screen(&img, reso.x, reso.y); // background color
+draw_sphere(&img, reso, cam, sp);
+
 /*
-fill_screen(&img, reso.x, reso.y);
 
 print_circle(img, 200, 200, 100, 0x00FF00);
 print_square(img, 300, 300, 10, 0x00FF00);
