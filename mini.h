@@ -5,6 +5,7 @@
 # include <unistd.h>
 # include <fcntl.h>
 
+//minilibx
 typedef struct  s_data {
     void        *img;
     void        *win;
@@ -15,6 +16,7 @@ typedef struct  s_data {
     int         endian;
 }               t_data;
 
+//parsing
 typedef struct  s_cord {
     float       x;
     float       y;
@@ -49,9 +51,9 @@ typedef struct  s_light {
     int         col;
 }               t_light;
 
+//minilibX
 void my_mlx_pixel_put(t_data *data, int x, int y, int color);
 int encode_color(int R, int G, int B);
-int ft_init_parse(t_reso *reso, t_lum_amb *amb, t_light *light, t_sphere *sp, t_cam *cam);
 void init_mlx(t_data *img, int xres, int yres);
 void fill_screen(t_data *img, int xres, int yres);
 // shapes
@@ -71,3 +73,5 @@ t_cord vect_scalar_prod(t_cord a, float x);
 t_cord vect_add(t_cord a, t_cord b);
 void print_vect(t_cord a);
 t_cord vect_normalize(t_cord a);
+// parsing
+int ft_init_parse(t_reso *reso, t_lum_amb *amb, t_light *light, t_sphere *sp, t_cam *cam);
